@@ -60,6 +60,102 @@ Try my function on some other things:
 z_scores(3)
 z_scores("my name")
 z_scores(mtcars)
-z_scores(c(TRUE, TRUE, FALSE, TRUE)
+z_scores(c(TRUE, TRUE, FALSE, TRUE))
 ```
+
+## Multiple outputs
+
+```{r}
+mean_and_sd = function(x) {
+  
+  if (!is.numeric(x)) {
+    stop("Input mst be numeric")
+  }
+  
+  if(length(x) < 3) {
+    stop("Input at least three numbers")
+  }
+  
+  mean_x = mean(x)
+  sd_x = sd(x)
+  
+  tibble(
+    mean = mean_x, 
+    sd = sd_x
+  )
+
+}
+```
+
+check if the function works
+```{r}
+x_vec = rnorm(1000)
+mean_and_sd(x_vec)
+```
+
+## multiple inputs
+```{r}
+sim_data = 
+  tibble(
+    x = rnorm(100, mean = 4, sd = 3)
+  )
+
+sim_data %>%
+  summarize(
+    mean = mean(x), 
+    sd = sd(x)
+  )
+```
+
+```{r}
+sim_mean_sd = function(sample_size, mu, sigma) {
+  
+  sim_data = 
+  tibble(
+    x = rnorm(n = sample_size, mean = mu, sd = sigma)
+  )
+
+sim_data %>%
+  summarize(
+    mean = mean(x), 
+    sd = sd(x)
+  )
+
+}
+
+sim_mean_sd(100, 6, 3)
+```
+
+## Mean scoping example
+```{r}
+
+f = function(x) {
+  
+  z = x + y
+  
+  z
+  
+}
+
+x = 1
+y = 2
+ f(x =y)
+```
+
+
+## Functions as arguments
+```{r}
+my_summary = function(x, sum_func) {
+  sum_func(x)
+}
+
+x_vec = rnorm(100, 3, 7)
+
+mean(x_vec)
+median(x_vec)
+
+my_summary(x_vec, mean)
+
+```
+
 
