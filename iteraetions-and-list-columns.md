@@ -77,9 +77,9 @@ list_norm[1]
 ```
 
     ## $a
-    ##  [1] 3.261632 2.807384 2.479490 4.004884 2.679675 3.801606 3.456872 3.605022
-    ##  [9] 4.012541 3.638902 3.294810 2.210421 2.659713 2.337192 3.617644 4.497157
-    ## [17] 3.411752 3.423365 2.416507 1.910055
+    ##  [1] 2.923329 4.116438 2.843138 2.890153 3.942374 4.027218 2.829789 3.648631
+    ##  [9] 4.068470 2.538249 6.172373 3.979622 4.289094 3.673798 2.990132 1.782695
+    ## [17] 1.799776 4.015895 1.710258 3.898962
 
 pause and get the old function.
 
@@ -114,7 +114,7 @@ mean_and_sd(list_norm[[1]])
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1  3.18 0.699
+    ## 1  3.41  1.06
 
 ``` r
 mean_and_sd(list_norm[[2]])
@@ -123,7 +123,7 @@ mean_and_sd(list_norm[[2]])
     ## # A tibble: 1 x 2
     ##     mean    sd
     ##    <dbl> <dbl>
-    ## 1 -0.113  5.36
+    ## 1 -0.380  6.22
 
 ``` r
 mean_and_sd(list_norm[[3]])
@@ -132,7 +132,7 @@ mean_and_sd(list_norm[[3]])
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1  10.0 0.251
+    ## 1  10.0 0.185
 
 ``` r
 mean_and_sd(list_norm[[4]])
@@ -141,7 +141,7 @@ mean_and_sd(list_norm[[4]])
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1 -3.32  1.06
+    ## 1 -3.33 0.838
 
 Let’s use a for loop:
 
@@ -153,3 +153,147 @@ for (i in 1:4) {
 output[[i]] = mean_and_sd(list_norm[[i]])
 }
 ```
+
+## Map
+
+``` r
+map(list_norm, mean_and_sd)
+```
+
+    ## $a
+    ## # A tibble: 1 x 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  3.41  1.06
+    ## 
+    ## $b
+    ## # A tibble: 1 x 2
+    ##     mean    sd
+    ##    <dbl> <dbl>
+    ## 1 -0.380  6.22
+    ## 
+    ## $c
+    ## # A tibble: 1 x 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  10.0 0.185
+    ## 
+    ## $d
+    ## # A tibble: 1 x 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1 -3.33 0.838
+
+map(list, function you want to do)
+
+``` r
+output = map(list_norm, median)
+```
+
+``` r
+output = map_dbl(list_norm, median)
+```
+
+``` r
+output = map_df(list_norm, mean_and_sd, .id = "input")
+```
+
+## List columns
+
+``` r
+listcol_df =
+  tibble(
+    name = c("a", "b", "c", "d"),
+    samp = list_norm
+  )
+```
+
+``` r
+listcol_df %>% pull(name)
+```
+
+    ## [1] "a" "b" "c" "d"
+
+``` r
+listcol_df %>% pull(samp)
+```
+
+    ## $a
+    ##  [1] 2.923329 4.116438 2.843138 2.890153 3.942374 4.027218 2.829789 3.648631
+    ##  [9] 4.068470 2.538249 6.172373 3.979622 4.289094 3.673798 2.990132 1.782695
+    ## [17] 1.799776 4.015895 1.710258 3.898962
+    ## 
+    ## $b
+    ##  [1]  2.7482728 -4.1446649 -9.2789711 -2.9496081 -4.7225038  8.8565984
+    ##  [7] -2.7243346 -5.6564845  6.2133325 -1.3785549 -3.8281978 13.2035172
+    ## [13] -0.4485176 -6.3097742 -7.9469845 -6.9513135  8.0718120  3.3418361
+    ## [19]  4.0112500  2.2872238
+    ## 
+    ## $c
+    ##  [1] 10.125713 10.222389  9.851736  9.986005  9.968438 10.206562 10.004889
+    ##  [8] 10.075820 10.186733  9.934460  9.927314 10.219644 10.040295  9.835210
+    ## [15]  9.639080  9.969527 10.418954  9.764363 10.148787  9.867686
+    ## 
+    ## $d
+    ##  [1] -3.233372 -3.221242 -1.760679 -3.508602 -3.619299 -3.400744 -4.377914
+    ##  [8] -2.619016 -3.257021 -2.800023 -4.246960 -5.207595 -4.072413 -3.086861
+    ## [15] -1.706444 -2.970990 -3.482340 -4.043684 -2.571086 -3.400521
+
+try operations:
+
+``` r
+mean_and_sd(listcol_df$samp[[1]])
+```
+
+    ## # A tibble: 1 x 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  3.41  1.06
+
+``` r
+map(listcol_df$samp, mean_and_sd)
+```
+
+    ## $a
+    ## # A tibble: 1 x 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  3.41  1.06
+    ## 
+    ## $b
+    ## # A tibble: 1 x 2
+    ##     mean    sd
+    ##    <dbl> <dbl>
+    ## 1 -0.380  6.22
+    ## 
+    ## $c
+    ## # A tibble: 1 x 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  10.0 0.185
+    ## 
+    ## $d
+    ## # A tibble: 1 x 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1 -3.33 0.838
+
+applying this function to each list in this listcolumn
+
+add a list column?
+
+``` r
+listcol_df %>%
+  mutate(
+    summary = map(samp, mean_and_sd), 
+    medians = map_dbl(samp, median)
+  )
+```
+
+    ## # A tibble: 4 x 4
+    ##   name  samp         summary          medians
+    ##   <chr> <named list> <named list>       <dbl>
+    ## 1 a     <dbl [20]>   <tibble [1 x 2]>    3.66
+    ## 2 b     <dbl [20]>   <tibble [1 x 2]>   -2.05
+    ## 3 c     <dbl [20]>   <tibble [1 x 2]>   10.0 
+    ## 4 d     <dbl [20]>   <tibble [1 x 2]>   -3.33

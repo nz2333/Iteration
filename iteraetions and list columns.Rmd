@@ -96,5 +96,60 @@ output[[i]] = mean_and_sd(list_norm[[i]])
 ```
 
 
+## Map
+```{r}
+map(list_norm, mean_and_sd)
+```
+map(list,  function you want to do)
+
+
+```{r}
+output = map(list_norm, median)
+```
+
+```{r}
+output = map_dbl(list_norm, median)
+```
+
+```{r}
+output = map_df(list_norm, mean_and_sd, .id = "input")
+```
+
+## List columns
+```{r}
+listcol_df =
+  tibble(
+    name = c("a", "b", "c", "d"),
+    samp = list_norm
+  )
+```
+
+```{r}
+listcol_df %>% pull(name)
+listcol_df %>% pull(samp)
+```
+
+try operations:
+```{r}
+mean_and_sd(listcol_df$samp[[1]])
+```
+
+```{r}
+map(listcol_df$samp, mean_and_sd)
+```
+applying this function to each list in this listcolumn
+
+add a list column?
+```{r}
+listcol_df %>%
+  mutate(
+    summary = map(samp, mean_and_sd), 
+    medians = map_dbl(samp, median)
+  )
+```
+
+
+
+
 
 
